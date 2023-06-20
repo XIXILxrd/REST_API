@@ -1,19 +1,39 @@
 package com.example.rest_api
 
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
-class TaskController {
-    @GetMapping("/")
-    fun index() = listOf(
-        Task("1", "Task 1", Date().time, true),
-        Task("2", "Task 2", Date().time, false),
-        Task("3", "Task 3", Date().time, false),
-        Task("4", "Task 4", Date().time, true),
-        Task("5", "Task 5", Date().time, false),
-        Task("6", "Task 6", Date().time, true),
-        Task("7", "Task 7", Date().time, false),
-    )
+@RequestMapping("/api")
+class TaskController(val service: TaskService) {
+    @GetMapping("/date")
+    fun getDate(): Long = Date().time
+    @GetMapping("/tasks")
+    fun getAllTasks() = service.getAll()
+
+    @GetMapping("/tasks/{id}")
+    fun getTaskById(@PathVariable id: Int) = service.getById(id)
+
+    @PostMapping("/tasks")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveTask(@RequestBody task: Task): Task = service.create(task)
+
+    @DeleteMapping("/tasks/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteTask(@PathVariable id: Int) = service.remove(id)
+
+    @PutMapping("/tasks/{id}")
+    fun updateTask(@PathVariable id: Int, @RequestBody task: Task) = service.update(id, task)
+
+    @PutMapping("/tasks/update/{id}")
+    fun updateStatus(@PathVariable id: Int) = service.changeStatus(id)
 }

@@ -1,3 +1,14 @@
 package com.example.rest_api
 
-data class Task(val id: String?, val name: String, val deadLine: Long, var status: Boolean)
+import jakarta.persistence.*
+import java.util.*
+
+@Entity
+@Table(name = "task")
+data class Task(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Int,
+    val name: String,
+    val description: String,
+    val deadLine: Date,
+    var status: Boolean
+)
