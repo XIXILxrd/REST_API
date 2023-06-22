@@ -1,5 +1,7 @@
 package com.example.rest_api
 
+import com.example.rest_api.model.Task
+import com.example.rest_api.repository.TaskRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -30,12 +32,14 @@ class TaskService(private val repository: TaskRepository) {
         }
     }
 
-//    fun changeStatus(id: Int, task: Task): Task {
-//        return if (repository.existsById(id)) {
-//            repository.findById(id).get().status = !repository.findById(id).get().status
-//            repository.findById(id).get()
-//        } else {
-//        throw ResponseStatusException(HttpStatus.NOT_FOUND)
-//    }
-//    }
+    fun changeStatus(id: Int): Task {
+        return if (repository.existsById(id)) {
+            val task = repository.findById(id).get()
+
+            task.status = !task.status
+            repository.save(task)
+        } else {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        }
+    }
 }
