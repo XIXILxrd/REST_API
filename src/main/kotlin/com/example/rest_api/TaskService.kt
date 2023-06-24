@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 class TaskService(private val repository: TaskRepository) {
     fun getAll(): List<Task> = repository.findAll()
+    fun getAll(status: Boolean?): List<Task> = repository.getAllWithStatus(status)
 
     fun getById(id: Int): Task = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
@@ -42,4 +43,10 @@ class TaskService(private val repository: TaskRepository) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND)
         }
     }
+
+    fun dailyTasks(status: Boolean?) = repository.tasksForToday(status)
+
+    fun weeklyTasks(status: Boolean?) = repository.taskForWeek(status)
+
+    fun monthlyTasks(status: Boolean?) = repository.taskForMonth(status)
 }

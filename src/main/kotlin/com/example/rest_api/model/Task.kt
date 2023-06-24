@@ -1,24 +1,23 @@
 package com.example.rest_api.model
 
 import jakarta.persistence.*
-import java.util.*
+import java.sql.Date
 
 @Entity
-@Table(name = "task")
 data class Task(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var id: Int,
 
-    @Column
-    val name: String,
+        @Column
+        val name: String,
 
-    @Column
-    val description: String,
+        @Column
+        val description: String,
 
-    @Column
-    val deadLine: Date,
+        @Column
+        var date: Date,
 
-    @Column
-    var status: Boolean
+        @Column
+        var status: Boolean
 )
