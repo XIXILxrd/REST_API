@@ -1,4 +1,4 @@
-package com.example.rest_api
+package com.example.rest_api.service
 
 import com.example.rest_api.model.Task
 import com.example.rest_api.repository.TaskRepository
@@ -6,6 +6,10 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+
+private const val DAILY = "daily"
+private const val WEEKLY = "weekly"
+private const val MONTHLY = "monthly"
 
 @Service
 class TaskService(private val repository: TaskRepository) {
@@ -44,9 +48,27 @@ class TaskService(private val repository: TaskRepository) {
         }
     }
 
-    fun dailyTasks(status: Boolean?) = repository.tasksForToday(status)
+    private fun dailyTasks(status: Boolean?) = repository.tasksForToday(status)
 
-    fun weeklyTasks(status: Boolean?) = repository.taskForWeek(status)
+    private fun weeklyTasks(status: Boolean?) = repository.taskForWeek(status)
 
-    fun monthlyTasks(status: Boolean?) = repository.taskForMonth(status)
+    private fun monthlyTasks(status: Boolean?) = repository.taskForMonth(status)
+
+    fun viewBy(range: String, status: Boolean?): List<Task> {
+        return if (status == null) {
+            when (range) {
+                DAILY -> dailyTasks(true) + dailyTasks(false)
+                WEEKLY -> weeklyTasks(true) + weeklyTasks(false)
+                MONTHLY -> monthlyTasks(true) + monthlyTasks(false)
+                else -> getAll()
+            }
+        } else {
+            when (range) {
+                DAILY -> dailyTasks(status)
+                WEEKLY -> weeklyTasks(status)
+                MONTHLY -> monthlyTasks(status)
+                else -> getAll(status)
+            }
+        }
+    }
 }
