@@ -7,7 +7,7 @@ import java.sql.Date
 data class Task(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "task_id", nullable = false)
+        @Column(name = "id", nullable = false)
         var id: Int? = null,
 
         @Column
