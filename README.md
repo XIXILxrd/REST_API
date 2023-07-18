@@ -4,4 +4,4 @@ https://www.postman.com/descent-module-operator-75373842/workspace/workspace/col
 
 PostrgeSQL credentials:
 username - postgres
-password - 1245
+password - 1234
